@@ -8,7 +8,7 @@ export default function auth(state = initial, {type,res}) {
       return { user: {...res} }
       break;
     case 'LOGIN_FAILED':
-      return {message: res}
+      return { error: true, message: res }
       break;
     default:
       return state

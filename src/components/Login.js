@@ -6,7 +6,7 @@ export const Login = ({
   ,onInputPassword
   ,onSubmit
 }) => (
-  <View>
+  <View style={styles.container}>
     <View style={styles.inputContainer}>
       <TextInput
         keyboardType="email-address"
@@ -21,7 +21,7 @@ export const Login = ({
     </View>
 
     <View style={[styles.inputContainer, styles.loginButton]}>
-      <Button onPress={onSubmit} title="Log in" />
+      <Button onPress={onSubmit} title="Enter" />
     </View>
   </View>
 )
@@ -40,5 +40,13 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     marginTop: 30
+  },
+  container: {
+    flex: 1,
+    paddingTop: 50,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: '#f2f2f2',
+    justifyContent: 'center'
   }
 });

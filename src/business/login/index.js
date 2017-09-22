@@ -23,7 +23,7 @@ class LoginContainer extends Component {
     return (
       <Login
         onInputEmail={this.onInputEmail}
-        onInputPassword={this.onInputPasasword}
+        onInputPassword={this.onInputPassword}
         onSubmit={this.onSubmit} />
     )
   }

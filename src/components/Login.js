@@ -40,13 +40,5 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     marginTop: 30
-  },
-  container: {
-    flex: 1,
-    paddingTop: 50,
-    paddingLeft: 20,
-    paddingRight: 20,
-    backgroundColor: '#f2f2f2',
-    justifyContent: 'center'
   }
 });

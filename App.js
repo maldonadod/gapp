@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet,View,NavigatorIOS } from 'react-native'
+import { StyleSheet,View,NavigatorIOS,Text } from 'react-native'
 import { Provider } from 'react-redux'
 import {connect} from 'react-redux'
 
@@ -10,14 +10,38 @@ import {
   HomeRoute
 } from './routes'
 
+class OnError extends Component {
+  render() {
+    const {error=false,message="",children} = this.props
+    return (
+      <View style={styles.container}>
+        {this.props.children}
+        {error && <Text>{message}</Text>}
+      </View>
+    )
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 50,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: '#f2f2f2',
+    justifyContent: 'center'
+  }
+})
+
 class Flow extends Component {
 
   render() {
-    const {user} = this.props.auth
-
-    if (!user) {
+    const {auth} = this.props
+    if (!auth.user) {
       return (
-        <Login />
+        <OnError message={auth.message} error={auth.error}>
+          <Login />
+        </OnError>
       )
     }
 

@@ -1,4 +1,6 @@
+import React, {Component} from 'react'
 import Home from '../src/business/home'
+import ActivityIndicatorEnhancer from '../src/enhancers'
 
 const RouteFactory = ({component,title,props}) => ({
   component
@@ -7,6 +9,6 @@ const RouteFactory = ({component,title,props}) => ({
 })
 
 export const HomeRoute = RouteFactory({
-  component: Home
+  component: ActivityIndicatorEnhancer(Home)
   ,title: 'Welcome'
 })

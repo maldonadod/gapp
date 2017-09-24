@@ -21,6 +21,10 @@ const flow = function* () {
     while (true) {
       const {credentials} = yield take('LOGIN_REQUEST')
 
+      yield put({
+        type: 'IS_BUSY'
+      })
+
       const res = yield call(auth, credentials)
 
       if (res.status === 'OK') {
@@ -34,6 +38,10 @@ const flow = function* () {
           res: res.message
         })
       }
+
+      yield put({
+        type: 'NOT_BUSY'
+      })
     }
   } catch (e) {
     yield put({

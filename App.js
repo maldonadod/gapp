@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { StyleSheet,View,NavigatorIOS,Text } from 'react-native'
+import { StyleSheet,View,NavigatorIOS,Text,ActivityIndicator } from 'react-native'
 import { Provider } from 'react-redux'
 import {connect} from 'react-redux'
 
+import ActivityIndicatorEnhancer from './src/enhancers'
 import Login from './src/business/login'
 import store from './store'
 
@@ -14,24 +15,13 @@ class OnError extends Component {
   render() {
     const {error=false,message="",children} = this.props
     return (
-      <View style={styles.container}>
+      <View>
         {this.props.children}
         {error && <Text>{message}</Text>}
       </View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 50,
-    paddingLeft: 20,
-    paddingRight: 20,
-    backgroundColor: '#f2f2f2',
-    justifyContent: 'center'
-  }
-})
 
 class Flow extends Component {
 
@@ -58,7 +48,7 @@ const mapState = state => ({
   auth: state.auth
 })
 
-const FlowContainer = connect(mapState)(Flow)
+const FlowContainer = ActivityIndicatorEnhancer(connect(mapState)(Flow))
 
 export default class App extends Component {
 

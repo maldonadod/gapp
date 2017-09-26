@@ -7,21 +7,11 @@ import ActivityIndicatorEnhancer from './src/enhancers'
 import Login from './src/business/login'
 import store from './store'
 
+import OnError from './src/components/OnError'
+
 import {
   HomeRoute
 } from './routes'
-
-class OnError extends Component {
-  render() {
-    const {error=false,message="",children} = this.props
-    return (
-      <View>
-        {this.props.children}
-        {error && <Text>{message}</Text>}
-      </View>
-    )
-  }
-}
 
 class Flow extends Component {
 

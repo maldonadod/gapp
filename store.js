@@ -5,7 +5,7 @@ import {
 } from 'redux'
 import reducers from './reducers'
 import {
-  flow
+  root
 } from './sagas'
 
 import createSagaMiddleware from 'redux-saga'
@@ -18,6 +18,6 @@ const enhancer = compose(
 
 const store = createStore(reducers, enhancer)
 
-sagaMiddleware.run(flow)
+sagaMiddleware.run(root)
 
 export default store

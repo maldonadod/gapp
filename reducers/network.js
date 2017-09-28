@@ -2,12 +2,12 @@ const initial = {
   busy: false
 }
 
-export default function network(state = initial, {type,res}) {
+export default function network(state = initial, {type}) {
   switch (type) {
-    case 'IS_BUSY':
+    case 'ACTIVITY_INDICATOR_ON':
       return {...state, busy: true}
       break;
-    case 'NOT_BUSY':
+    case 'ACTIVITY_INDICATOR_OFF':
       return {...state, busy: false}
       break;
     default:

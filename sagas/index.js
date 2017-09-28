@@ -1,12 +1,11 @@
-import {take, put, call} from 'redux-saga/effects'
+import {take, put, call, takeLatest, fork} from 'redux-saga/effects'
 
 const URL = `https://gapp-server.herokuapp.com`
 
-const auth = ({email,password}) => {
-
-  return fetch(`${URL}/login`, {
+const post = ({url,body}) => {
+  return fetch(url, {
     method: 'POST',
-    body: JSON.stringify({email,password}),
+    body: JSON.stringify(body),
     headers: {
       'Accept': 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
@@ -15,32 +14,21 @@ const auth = ({email,password}) => {
   .then(res => res.json())
 }
 
-const flow = function* () {
+const auth = function* ({credentials}) {
 
+  const url = `${URL}/login`
   try {
-    while (true) {
-      const {credentials} = yield take('LOGIN_REQUEST')
-
+    const res = yield call(post, {url,body:credentials})
+    
+    if (res.status === 'OK') {
       yield put({
-        type: 'IS_BUSY'
+        type: 'LOGIN_SUCCESS',
+        res: res.data
       })
-
-      const res = yield call(auth, credentials)
-
-      if (res.status === 'OK') {
-        yield put({
-          type: 'LOGIN_SUCCESS',
-          res: res.data
-        })
-      } else if (res.status === 'ERR') {
-        yield put({
-          type: 'LOGIN_FAILED',
-          res: res.message
-        })
-      }
-
+    } else if (res.status === 'ERR') {
       yield put({
-        type: 'NOT_BUSY'
+        type: 'LOGIN_FAILED',
+        res: res.message
       })
     }
   } catch (e) {
@@ -49,8 +37,35 @@ const flow = function* () {
       res: e.message
     })
   }
-};
+}
+
+const watch_and_dispatch = ([watch, action]) => {
+  return function* () {
+    while (true) {
+      yield take(watch)
+      yield put(action)
+    }
+  }
+}
+
+const activity_off = () => ({
+  type: 'ACTIVITY_INDICATOR_OFF'
+})
+const activity_on = () => ({
+  type: 'ACTIVITY_INDICATOR_ON'
+})
+
+const root = function* () {
+
+  const activityOn = watch_and_dispatch([['LOGIN_REQUEST'], activity_on()])
+  const activityOff = watch_and_dispatch([['LOGIN_SUCCESS', 'LOGIN_FAILED'], activity_off()])
+
+  yield fork(activityOn)
+  yield fork(activityOff)
+  
+  yield takeLatest('LOGIN_REQUEST', auth)
+}
 
 export {
-  flow
+  root
 }

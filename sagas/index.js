@@ -1,22 +1,23 @@
 import {take, put, call, takeLatest, fork} from 'redux-saga/effects'
-
-const URL = `https://gapp-server.herokuapp.com`
-
-const post = ({url,body}) => {
-  return fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: {
-      'Accept': 'application/json, text/plain, */*',
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(res => res.json())
-}
+import {
+  post
+} from '../network/fetch'
+import {
+  API_URL
+} from '../env'
+import {
+  createAction
+  ,ACTIVITY_INDICATOR_ON
+  ,ACTIVITY_INDICATOR_OFF
+} from '../actions'
+import {
+  ACTIONS_ACTIVITY_INDICATOR_ON
+  ,ACTIONS_ACTIVITY_INDICATOR_OFF
+} from '../src/business/network'
 
 const auth = function* ({credentials}) {
 
-  const url = `${URL}/login`
+  const url = `${API_URL}/login`
   try {
     const res = yield call(post, {url,body:credentials})
     
@@ -48,17 +49,13 @@ const watch_and_dispatch = ([watch, action]) => {
   }
 }
 
-const activity_off = () => ({
-  type: 'ACTIVITY_INDICATOR_OFF'
-})
-const activity_on = () => ({
-  type: 'ACTIVITY_INDICATOR_ON'
-})
+const activity_off = createAction(ACTIVITY_INDICATOR_OFF)
+const activity_on = createAction(ACTIVITY_INDICATOR_ON)
 
 const root = function* () {
 
-  const activityOn = watch_and_dispatch([['LOGIN_REQUEST'], activity_on()])
-  const activityOff = watch_and_dispatch([['LOGIN_SUCCESS', 'LOGIN_FAILED'], activity_off()])
+  const activityOn = watch_and_dispatch([ACTIONS_ACTIVITY_INDICATOR_ON, activity_on])
+  const activityOff = watch_and_dispatch([ACTIONS_ACTIVITY_INDICATOR_OFF, activity_off])
 
   yield fork(activityOn)
   yield fork(activityOff)
